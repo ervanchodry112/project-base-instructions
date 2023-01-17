@@ -2,7 +2,7 @@
 require __DIR__ . '/vendor/autoload.php';
 error_reporting(0);
 
-$code = $_GET['code'];
+$code = $_GET['id'];
 
 $client = new Google_Client();
 
