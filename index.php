@@ -33,7 +33,9 @@ foreach ($values as $row) {
     }
 }
 
-// var_dump($data);
+$grading = explode("\n", $data[5]);
+
+// var_dump($grading);
 
 ?>
 
@@ -124,7 +126,17 @@ foreach ($values as $row) {
                                 </tr>
                                 <tr>
                                     <td width="25%"><b>Grading</b></td>
-                                    <td><?= $data[5] ?></td>
+                                    <td>
+                                        <ol style="padding-left: 20px; padding-top:10px;">
+                                            <?php
+                                            foreach ($grading as $g) {
+                                            ?>
+                                                <li><?= $g ?></li>
+                                            <?php
+                                            }
+                                            ?>
+                                        </ol>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
