@@ -6,7 +6,7 @@ $code = $_GET['id'];
 
 $client = new Google_Client();
 
-$client->setApplicationName('Coba Spreadsheet API PHP');
+$client->setApplicationName('Practice Instructions');
 
 $client->setScopes([Google\Service\Sheets::SPREADSHEETS]);
 
@@ -18,22 +18,22 @@ $service = new Google\Service\Sheets($client);
 
 $spreadsheetId = "1HOkLicWIffmT7UxTqd2XNWKz5CmCLL5Ue9gO9rq5iBA"; //It is present in your URL
 
-$get_range = "PROJECT-BASE INSTRUCTIONS!A2:F47";
+$get_range = "PRACTICE-INSTRUCTIONS!A2:E";
 
 
 $response = $service->spreadsheets_values->get($spreadsheetId, $get_range);
 $values = $response->getValues();
 
 $status = false;
+$data = array();
 foreach ($values as $row) {
     if ($row[0] == $code) {
-        $data = $row;
+        $data[] = $row;
         $status = true;
-        break;
     }
 }
 
-$grading = explode("\n", $data[5]);
+// $grading = explode("\n", $data[5]);
 
 // var_dump($grading);
 
@@ -97,47 +97,51 @@ $grading = explode("\n", $data[5]);
                     </table>
 
                     <div style="padding: 24px;">
-                        <b style="font-size: 24px; text-align: center; display: block; padding-top:20px;">PROJECT BASE INSTRUCTIONS</b><br>
+                        <!-- <b style="font-size: 24px; text-align: center; display: block; padding-top:20px;">PRACTICE INSTRUCTIONS</b><br> -->
                         <table style="padding-top:20px; padding-bottom:20px; font-size: 18px;">
                             <tr>
                                 <td style="padding-right: 50px;">Subject</td>
-                                <td>: <b><?= $data[1] ?></b></td>
+                                <td>: <b><?= $data[0][1] ?></b></td>
                             </tr>
                             <tr>
                                 <td>Code</td>
-                                <td>: <?= $data[0] ?></td>
+                                <td>: <?= $data[0][0] ?></td>
+                            </tr>
+                            <tr>
+                                <td>Credit</td>
+                                <td>: <?= $data[0][2] ?></td>
                             </tr>
                         </table>
                         <p>
-                            <b style="font-size: 20px; text-align: center; display: block; padding-top:20px;">FINAL PROJECT</b><br>
+                            <b style="font-size: 24px; text-align: center; display: block; padding-top:0px;">PRACTICE INSTRUCTIONS</b><br>
                         <table id="main-table" width="100%" border="1" cellspacing="0" cellpadding="4" align="center">
+                            <thead style="text-align: center;">
+                                <th>Topics</th>
+                                <th>Instruction</th>
+                            </thead>
                             <tbody>
-                                <tr>
-                                    <td width="25%"><b>Objective</b></td>
-                                    <td><?= $data[2] ?></td>
-                                </tr>
-                                <tr>
-                                    <td width="25%"><b>Study Case</b></td>
-                                    <td><?= $data[3] ?></td>
-                                </tr>
-                                <tr>
-                                    <td width="25%"><b>Questions</b></td>
-                                    <td><?= $data[4] ?></td>
-                                </tr>
-                                <tr>
-                                    <td width="25%"><b>Grading</b></td>
-                                    <td>
-                                        <ol style="padding-left: 20px; padding-top:10px;">
-                                            <?php
-                                            foreach ($grading as $g) {
-                                            ?>
-                                                <li><?= $g ?></li>
-                                            <?php
-                                            }
-                                            ?>
-                                        </ol>
-                                    </td>
-                                </tr>
+                                <?php
+                                foreach ($data as $row) {
+                                    $instruction = explode("\n", $row[4]);
+                                ?>
+                                    <tr>
+                                        <td><?= $row[3] ?></td>
+                                        <td>
+                                            <ol>
+                                                <?php
+                                                foreach ($instruction as $ins) {
+                                                ?>
+                                                    <li><?= $ins ?></li>
+                                                <?php
+                                                }
+                                                ?>
+                                            </ol>
+                                        </td>
+                                    </tr>
+
+                                <?php
+                                }
+                                ?>
                             </tbody>
                         </table>
                         </p>
